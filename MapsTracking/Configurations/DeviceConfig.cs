@@ -8,9 +8,9 @@ namespace MapsTracking.Configurations
     {
         public void Configure(EntityTypeBuilder<Device> builder)
         {
-            builder.HasMany(d => d.Locations)
+            builder.HasMany(d => d.TrackingEvents)
                    .WithOne(dl => dl.Device)
-                   .HasForeignKey(dl => dl.DeviceId)
+                   .HasForeignKey(dl => dl.DeviceID)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }

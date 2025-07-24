@@ -3,21 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MapsTracking.Models
 {
-    [Table("Device")]
+    [Table("GPS_Device")]
     public class Device
     {
         [Key]
-        public int Id { get; set; }
+        [Column("DeviceID")]
+        public string DeviceID { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
-        public string? Description { get; set; } = string.Empty;
-
         public Device()
         {
-            Locations = new List<DeviceLocation>();
+            TrackingEvents = new List<DeviceLocation>();
         }
 
-        public ICollection<DeviceLocation> Locations { get; set; }
+        public ICollection<DeviceLocation> TrackingEvents { get; set; }
     }
 }

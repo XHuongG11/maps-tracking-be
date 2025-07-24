@@ -4,17 +4,27 @@ using System.Text.Json.Serialization;
 
 namespace MapsTracking.Models
 {
-    [Table("DeviceLocation")]
+    [Table("GPS_TrackingEvents")]
     public class DeviceLocation
     {
         [Key]
-        public int Id { get; set; }
+        [Column("Oid")]
+        public Guid Oid { get; set; }
 
-        public int DeviceId { get; set; }
+        [Column("DeviceID")]
+        public string DeviceID { get; set; }
+
+        public string Title { get; set; }
 
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public DateTime Timestamp { get; set; }
+
+        [Column("RecordDate")]
+        public DateTime RecordDate { get; set; }
+
+        public string UserName { get; set; }
+        public int Type {  get; set; }
+        public string LinkInfo { get; set; }
 
         [JsonIgnore]
         public virtual Device Device { get; set; }

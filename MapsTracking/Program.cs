@@ -31,12 +31,12 @@ app.UseCors("AllowFrontend");
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<Context>();
-    context.Database.EnsureCreated(); // tạo nếu chwua có
+    //context.Database.EnsureCreated(); // tạo nếu chwua có
 }
 
 
 // routes
-app.MapGet("/maps-tracking/api/devices", async (Context db) =>
+app.MapGet("/api/devices", async (Context db) =>
 {
     try
     {
@@ -49,27 +49,22 @@ app.MapGet("/maps-tracking/api/devices", async (Context db) =>
     }
 });
 
-app.MapGet("/maps-tracking/api/device-location/{id:int}/{date}", async (int id, String date, Context db) =>
+app.MapGet("/api/locations/", async (string deviceID, String date, Context db) =>
 {
     try
     {
         if (DateTime.TryParse(date, out var parsedDate))
         {
-            var device = await db.Devices.Include(d => d.Locations)
-                .FirstOrDefaultAsync(d => d.Id == id);
+
+            var device = await db.Devices.Include(d => d.TrackingEvents)
+                .FirstOrDefaultAsync(d => d.DeviceID == deviceID);
             if (device == null)
             {
                 return Results.NotFound();
             }
             // tìm các device location theo deviceId và ngày
-            var results = device.Locations.Where(dl =>
-            dl.Timestamp.Date == parsedDate.Date).Select(dl => new
-            {
-                dl.Id,
-                dl.Latitude,
-                dl.Longitude,
-                dl.Timestamp
-            }).OrderBy(dl => dl.Timestamp).ToList();
+            var results = device.TrackingEvents.Where(dl =>
+            dl.RecordDate.Date == parsedDate.Date).OrderBy(dl => dl.RecordDate).ToList();
 
             return Results.Ok(results);
         }
