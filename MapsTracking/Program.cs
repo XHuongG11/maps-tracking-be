@@ -1,5 +1,6 @@
 ﻿using MapsTracking;
 using MapsTracking.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,10 +50,14 @@ app.MapGet("/api/devices", async (Context db) =>
     }
 });
 
-app.MapGet("/api/locations/", async (string deviceID, String date, Context db) =>
+app.MapGet("/api/locations/", async (HttpContext context, Context db) =>
 {
     try
     {
+        var deviceID = context.Request.Query["deviceID"].ToString();
+        var date = context.Request.Query["date"].ToString();
+        var types = context.Request.Query["types"].ToList();
+ 
         if (DateTime.TryParse(date, out var parsedDate))
         {
 
@@ -64,7 +69,7 @@ app.MapGet("/api/locations/", async (string deviceID, String date, Context db) =
             }
             // tìm các device location theo deviceId và ngày
             var results = device.TrackingEvents.Where(dl =>
-            dl.RecordDate.Date == parsedDate.Date).OrderBy(dl => dl.RecordDate).ToList();
+            dl.RecordDate.Date == parsedDate.Date && types.Contains(dl.Type.ToString())).OrderBy(dl => dl.RecordDate).ToList();
 
             return Results.Ok(results);
         }

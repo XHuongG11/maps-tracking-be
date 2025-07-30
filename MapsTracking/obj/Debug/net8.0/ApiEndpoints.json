@@ -22,18 +22,7 @@
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "deviceID",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "date",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
