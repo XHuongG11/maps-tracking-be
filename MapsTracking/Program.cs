@@ -20,14 +20,28 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://127.0.0.1:5500")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
 builder.Services.AddControllers();
 
+// session 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(120);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.None; 
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+});
+
 var app = builder.Build();
 app.UseCors("AllowFrontend");
+app.UseSession();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -82,7 +96,36 @@ app.MapGet("/api/locations/", async (HttpContext context, Context db) =>
     }
 });
 
-app.MapPost("maps-tracking/api/device-location", async (DeviceLocation request, Context db) =>
+app.MapPost("/api/login", async (User request, Context db, HttpContext context) =>
+{
+    try
+    {
+        var user = await db.Users.FindAsync(request.Username);
+        if(user == null)
+            return Results.NotFound("User not found");
+        if (user.PIN != request.PIN)
+            return Results.BadRequest("PIN is incorrect");
+        context.Session.SetString("username", user.Username);
+        return Results.Ok(new { username = user.Username });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+app.MapGet("/api/authenticate", (HttpContext context) =>
+{
+    var username = context.Session.GetString("username");
+    if (username == null)
+    {
+        return Results.Unauthorized();
+    }
+
+    return Results.Ok();
+});
+
+app.MapPost("/api/device-location", async (DeviceLocation request, Context db) =>
 {
     try
     {

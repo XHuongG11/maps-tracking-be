@@ -9,6 +9,7 @@ namespace MapsTracking.Models
     {
         [Key]
         [Column("Oid")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Oid { get; set; }
 
         [Column("DeviceID")]

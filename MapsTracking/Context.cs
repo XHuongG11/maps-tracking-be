@@ -10,6 +10,7 @@ namespace MapsTracking
 
         public DbSet<Device> Devices { get; set; }
         public DbSet<DeviceLocation> DeviceLocations { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
