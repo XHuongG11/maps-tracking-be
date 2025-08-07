@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MapsTracking")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f398767938a46e79f2a5a84131564f4ec6044b62")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+acdbe711982f4dfae8310d5ce72f2f2e6fb01ecd")]
 [assembly: System.Reflection.AssemblyProductAttribute("MapsTracking")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MapsTracking")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
